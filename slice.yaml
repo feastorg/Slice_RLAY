@@ -1,0 +1,209 @@
+schema_version: "1.0"
+
+# ── Identity ──────────────────────────────────────────────────────────────────
+id: "slice-rlay"
+name: "4-Channel Relay"
+status: "prototype"
+category: "actuation"
+
+summary: "4-channel optocoupler-isolated relay slice with analog feedback inputs."
+description: null
+
+# ── Versioning ────────────────────────────────────────────────────────────────
+version:
+  hardware: "0.1.0"
+  firmware: null
+  manifest: "0.1.0"
+
+# ── Compatibility ─────────────────────────────────────────────────────────────
+compatibility:
+  slice_spec: ">=0.1.0 <0.2.0"
+  crumbs_protocol: null
+  anolis_provider_api: null
+
+# ── Hardware ──────────────────────────────────────────────────────────────────
+hardware:
+  mcu:
+    type: "dev-board-socket"
+    form_factor: "nano"
+    primary: "ATmega328P"
+    supported:
+      - "ATmega328P"
+  primary_ic:
+    manufacturer: "Omron"
+    part_number: "G5Q-1"
+  hw_gen_current: 1
+  hw_gen_supported: [1, 2]
+  pcb:
+    layers: 2
+    thickness: "1.6mm"
+    copper_weight: "1oz"
+    dimensions: "70mm x 100mm"
+  connectors:
+    - ref: "J1"
+      type: "slice-bus-10pin"
+      purpose: "power-and-i2c"
+    - ref: "J2-J5"
+      type: "terminal-block-3pos"
+      purpose: "relay-output-nc-no-com"
+    - ref: "J6"
+      type: "terminal-block-4pos"
+      purpose: "analog-feedback-input"
+  mounting:
+    pattern: "slice-standard-v0"
+    hole_size: "M3"
+    inset: "5mm"
+  pcb_color_prototype: null
+  pcb_color_production: null
+  enclosure:
+    supported: false
+    path: null
+
+# ── Electrical ────────────────────────────────────────────────────────────────
+electrical:
+  input_voltage: "12V"
+  logic_voltage: "5V"
+  max_current: null
+  protection:
+    reverse_polarity: false
+    input_esd: false
+    fuse: false
+  isolation:
+    present: true
+
+# ── Interfaces ────────────────────────────────────────────────────────────────
+interfaces:
+  host:
+    type: "i2c"
+    address_default: null
+    address_configurable: false
+  data:
+    inputs:
+      - name: "A_IN1"
+        type: "analog"
+      - name: "A_IN2"
+        type: "analog"
+      - name: "A_IN3"
+        type: "analog"
+      - name: "A_IN4"
+        type: "analog"
+    outputs:
+      - name: "RELAY1"
+        type: "relay-spdt"
+      - name: "RELAY2"
+        type: "relay-spdt"
+      - name: "RELAY3"
+        type: "relay-spdt"
+      - name: "RELAY4"
+        type: "relay-spdt"
+
+# ── Capabilities ──────────────────────────────────────────────────────────────
+capabilities:
+  - id: "relay_switching"
+    channels: 4
+    control_modes: ["on_off"]
+  - id: "analog_read"
+    channels: 4
+    control_modes: []
+
+# ── Firmware ──────────────────────────────────────────────────────────────────
+firmware:
+  required: true
+  path: "firmware/"
+  language: "c++"
+  framework: "arduino"
+  targets:
+    - "rlay_gen1"
+  lib_deps: []
+
+# ── Protocol ──────────────────────────────────────────────────────────────────
+protocol:
+  type: "serial"
+  discovery:
+    supported: false
+  commands: []
+
+# ── Software ──────────────────────────────────────────────────────────────────
+software: null
+
+# ── Artifacts ─────────────────────────────────────────────────────────────────
+artifacts:
+  schematic: "hardware/BREAD_Slice.kicad_sch"
+  pcb: "hardware/BREAD_Slice.kicad_pcb"
+  firmware: "firmware/"
+  docs: null
+  bom: "documentation/BOM_RLAY.ods"
+  gerbers: "hardware/outputs/"
+  pick_and_place: null
+  datasheets:
+    - "documentation/en-g5q.pdf"
+    - "documentation/tcmt1100.pdf"
+    - "documentation/3266.pdf"
+
+# ── Manufacturing ─────────────────────────────────────────────────────────────
+manufacturing:
+  assembly_type: "manual"
+  preferred_fab: null
+  dnp_parts: []
+  critical_parts: []
+  substitutions_allowed: true
+
+# ── Validation ────────────────────────────────────────────────────────────────
+validation:
+  status: "not_validated"
+  tested_revisions: []
+  tests:
+    electrical: false
+    firmware: false
+    environmental: false
+    integration: false
+  known_issues: []
+
+# ── Safety ────────────────────────────────────────────────────────────────────
+safety:
+  hazards:
+    - "mains-voltage switching capable"
+  max_safe_voltage: "277V AC"
+  intended_environment: "lab"
+  not_for:
+    - "human safety critical systems"
+    - "unattended mains switching"
+
+# ── Dependencies ──────────────────────────────────────────────────────────────
+dependencies:
+  hardware: []
+  firmware_libraries: []
+  software_packages: []
+
+# ── Relations ─────────────────────────────────────────────────────────────────
+related:
+  supersedes: null
+  superseded_by: null
+  variants: []
+  compatible_slices: []
+
+# ── Maintainers ───────────────────────────────────────────────────────────────
+maintainers:
+  - name: "Cameron Brooks"
+    role: "owner"
+
+# ── License ───────────────────────────────────────────────────────────────────
+license:
+  hardware: "CERN-OHL-S-2.0"
+  firmware: "GPL-3.0-or-later"
+  software: null
+  docs: "CC-BY-4.0"
+
+# ── Repository ────────────────────────────────────────────────────────────────
+repository:
+  url: "https://github.com/feastorg/Slice_RLAY"
+
+# ── Metadata ──────────────────────────────────────────────────────────────────
+metadata:
+  created: "2026-05-19"
+  updated: "2026-05-19"
+  tags:
+    - "relay"
+    - "switching"
+    - "analog-input"
+    - "optocoupler"
